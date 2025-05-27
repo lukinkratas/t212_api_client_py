@@ -1,0 +1,24 @@
+[project]
+name = "t212-client-py"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.ruff]
+line-length = 88
+indent-width = 4
+
+[tool.ruff.lint]
+extend-select = ["E501", "N", "R", "I", "C901", "PD", "NPY"]
+
+[tool.ruff.format]
+quote-style = "single"
+indent-style = "space"
+
+[tool.mypy]
+strict = true
+explicit_package_bases = true
+check_untyped_defs = true
+ignore_missing_imports = true
