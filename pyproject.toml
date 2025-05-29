@@ -4,7 +4,10 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "python-dateutil>=2.9.0.post0",
+    "requests>=2.32.3",
+]
 
 [tool.ruff]
 line-length = 88
@@ -21,4 +24,9 @@ indent-style = "space"
 strict = true
 explicit_package_bases = true
 check_untyped_defs = true
-ignore_missing_imports = true
+disable_error_code = ["no-any-return"]
+
+[dependency-groups]
+dev = [
+    "python-dotenv>=1.1.0",
+]

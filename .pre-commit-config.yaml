@@ -1,0 +1,28 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: ruff format
+        language: system
+        entry: uv run --dev ruff format
+        types: [python]
+
+      - id: ruff-lint
+        name: ruff lint
+        language: system
+        entry: uv run --dev ruff check --fix
+        types: [python]
+
+      - id: mypy-type-check
+        name: mypy type check
+        language: system
+        entry: uv run --dev mypy
+        types: [python]
