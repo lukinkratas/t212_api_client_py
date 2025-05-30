@@ -6,7 +6,7 @@ TODO
 
 - [ ] add asyncio
 
-- [ ] logging
+- [ ] add logging
 
 ```bash
 uv sync

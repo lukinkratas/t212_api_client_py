@@ -1,9 +1,14 @@
 import datetime
+import logging
 import time
 from copy import copy
 from typing import Any
 
 import requests
+
+from .decorators import track_args
+
+logger = logging.getLogger(__name__)
 
 
 class APIClient(object):
@@ -19,7 +24,7 @@ class APIClient(object):
                 headers={'Content-Type': 'application/json', 'Authorization': self.key},
                 json=payload,
             )
-            print(f'{response.status_code=}')
+            logger.debug(f'{response.status_code=}')
 
             # in case of 429 limited Try again
             if response.status_code != 429:
@@ -39,7 +44,7 @@ class APIClient(object):
             response = requests.get(
                 url, headers={'Authorization': self.key}, params=query
             )
-            print(f'{response.status_code=}')
+            logger.debug(f'{response.status_code=}')
 
             # in case of 429 limited Try again
             if response.status_code != 429:
@@ -82,6 +87,7 @@ class APIClient(object):
 
         return items
 
+    @track_args
     def create_report(
         self,
         from_dt: str | datetime.datetime | datetime.date,
@@ -123,6 +129,7 @@ class APIClient(object):
         # return response.json()
         return self._post_request_loop(url, payload=payload)
 
+    @track_args
     def list_reports(self) -> list[dict[str, Any]] | None:
         """Fetches list of reports.
 
@@ -135,10 +142,12 @@ class APIClient(object):
         # return response.json()
         return self._get_request_loop(url)
 
+    @track_args
     def get_portfolio(self) -> list[dict[str, Any]] | None:
         url = 'https://live.trading212.com/api/v0/equity/portfolio'
         return self._get_request_loop(url)
 
+    @track_args
     def get_transactions(
         self, from_dt: str | datetime.datetime | datetime.date | None = None
     ) -> list[dict[str, str]] | None:
@@ -150,7 +159,6 @@ class APIClient(object):
         if isinstance(from_dt, (datetime.datetime, datetime.date)):
             from_dt = from_dt.strftime('%Y-%m-%dT%H:%M:%SZ')
 
-        print(f'{from_dt=}')
         url = 'https://live.trading212.com/api/v0/history/transactions'
         query = {'limit': '50'}  # 'cursor': '0',
         if from_dt:
@@ -163,6 +171,7 @@ class APIClient(object):
 
         return transactions
 
+    @track_args
     def get_orders(self, ticker: str | None = None) -> list[dict[str, str]] | None:
         url = 'https://live.trading212.com/api/v0/equity/history/orders'
         query = {'limit': '50'}  # 'cursor': '0',

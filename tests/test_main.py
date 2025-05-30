@@ -107,3 +107,15 @@ def test_get_orders() -> None:
 
     # # test ticker
     # aapl_orders = t212_client.get_orders('AAPL_US_EQ')
+
+
+def main() -> None:
+    test_create_report()
+    test_list_reports()
+    test_get_portfolio()
+    test_get_transactions()
+    test_get_orders()
+
+
+if __name__ == '__main__':
+    main()
