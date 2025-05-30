@@ -1,12 +1,9 @@
 import datetime
-import os
 import time
 from copy import copy
 from typing import Any
 
 import requests
-from dateutil.relativedelta import relativedelta
-from dotenv import load_dotenv
 
 
 class APIClient(object):
@@ -76,13 +73,11 @@ class APIClient(object):
 
             next_page_path = response_json['nextPagePath']
 
-            print(next_page_path)
             # nextPagePath transactions: limit=20&cursor=245a5a7f-04b4-45d3-affa-72eb8ff6d62a&time=2025-05-07T00:03:03.896Z # noqa: E501
             # nextPagePath orders: /api/v0/equity/history/orders?cursor=1651066203000&limit=20&instrumentCode # noqa: E501
             if '?' in next_page_path:
                 next_page_path = next_page_path.split('?')[1]
 
-            print(next_page_path)
             url = f'{base_url}?{next_page_path}'
 
         return items
@@ -140,7 +135,7 @@ class APIClient(object):
         # return response.json()
         return self._get_request_loop(url)
 
-    def get_portfolio(self) -> dict[str, str] | None:
+    def get_portfolio(self) -> list[dict[str, Any]] | None:
         url = 'https://live.trading212.com/api/v0/equity/portfolio'
         return self._get_request_loop(url)
 
@@ -179,49 +174,3 @@ class APIClient(object):
             return None
 
         return orders
-
-
-def main() -> None:
-    load_dotenv(override=True)
-
-    t212_client = APIClient(key=os.environ['T212_API_KEY'])
-
-    # test create_report
-    to_dt = datetime.datetime.today()
-    from_dt = to_dt - relativedelta(months=1)
-    report = t212_client.create_report(from_dt, to_dt)
-    print(f'{report=}')
-
-    # test list_reports
-    reports = t212_client.list_reports()
-    print(f'{reports=}')
-
-    # test portfolio
-    portfolio = t212_client.get_portfolio()
-    print(f'{portfolio=}')
-
-    # test all transactions
-    transactions = t212_client.get_transactions()
-    print(f'{transactions=}')
-
-    # # test datetime from_dt - WIP
-    # transactions_2025 = t212_client.get_transactions(
-    #     datetime.datetime(2025, 5, 24, 14, 15, 22)
-    # )
-    # print(f'{transactions_2025=}')
-
-    # # test str from_dt - WIP
-    # transactions_2025 = t212_client.get_transactions('2025-05-24T14:15:22Z')
-    # print(f'{transactions_2025=}')
-
-    # test all orders
-    orders = t212_client.get_orders()
-    print(f'{orders=}')
-
-    # test AAPL orders
-    aapl_orders = t212_client.get_orders('AAPL_US_EQ')
-    print(f'{aapl_orders=}')
-
-
-if __name__ == '__main__':
-    main()
