@@ -1,10 +1,18 @@
 import datetime
+import logging
 import os
 
 from dateutil.relativedelta import relativedelta
 from dotenv import load_dotenv
 
 from t212 import APIClient
+
+logging.basicConfig(
+    format='%(asctime)s | %(name)s | %(levelname)-8s | %(message)s',
+    level=logging.DEBUG,
+)
+
+logger = logging.getLogger(__name__)
 
 load_dotenv(override=True)
 
