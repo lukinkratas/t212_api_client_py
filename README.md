@@ -8,6 +8,8 @@ TODO
 
 - [ ] add logging
 
+- [x] add base_url
+
 ```bash
 uv sync
 ```
